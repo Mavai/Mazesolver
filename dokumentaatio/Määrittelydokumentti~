@@ -1,4 +1,4 @@
-#H1 Aihemäärittely  
+# H1 Aihemäärittely  
 
 Mazesolver on ohjelma jolla voi luoda halutun kokoisen labyrintin 
 ja simuloida muunmuassa A* -polunetsintäalgoritmin toimintaa. Polun alku- ja päätepisteet 
