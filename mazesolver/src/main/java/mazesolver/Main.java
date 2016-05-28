@@ -1,9 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mazesolver;
+
+import mazesolver.domain.Maze;
+import mazesolver.logic.Astar;
 
 /**
  *
@@ -11,11 +9,15 @@ package mazesolver;
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+            Maze maze = new Maze(201, 21);
+            Astar astar = new Astar(maze.getMaze());
+            System.out.println(astar.getDistance(maze.getStartX(), maze.getStartY()));
+            astar.findShortestPath(maze.getStartX(), maze.getStartY(), 0, 0);
+            int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
+            maze.print();
+            System.out.println(dist);
+            
     }
-    
+
 }
