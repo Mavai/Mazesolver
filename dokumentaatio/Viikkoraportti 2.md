@@ -9,3 +9,9 @@ labyrintin läpi. Algoritmi on optimoutu versio Dijkstran polunetsintäalgoritmi
 jokaista labyrintin ruutua. Tätä voi simuloida esittämällä algoritmin etenemistä labyrintissä graafisesti.
 
 Seuraavaksi tutkin muita mahdollisia reitinhakualgoritmeja projektissa käytettäväksi ja aloitan niiden toteuttamista.
+
+Tuntikirjanpito:
+- Torstai 3h
+- Perjantai 7h
+- Lauantai 7h
+- Sunnuntai 3h
