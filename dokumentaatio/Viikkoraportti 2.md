@@ -11,7 +11,7 @@ jokaista labyrintin ruutua. Tätä voi simuloida esittämällä algoritmin etene
 Seuraavaksi tutkin muita mahdollisia reitinhakualgoritmeja projektissa käytettäväksi ja aloitan niiden toteuttamista.
 
 Tuntikirjanpito:
-- Torstai 3h
-- Perjantai 7h
-- Lauantai 7h
-- Sunnuntai 3h
+- Torstai 26.5: **3h**
+- Perjantai 27.5: **7h**
+- Lauantai 28.5: **7h**
+- Sunnuntai 29.5: **3h**
