@@ -1,20 +1,26 @@
-
 package mazesolver.logic;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import mazesolver.domain.Node;
 
 /**
- *
+ * This class provides implementation for A-Star pathfinding algorithm. It gets the maze in which we are looking for a path as a parameter.
  * @author Marko Vainio
  */
 public class Astar {
+
     private int[][] distance;
     private boolean[][] used;
     private char[][] maze;
     private PriorityQueue<Node> que;
+    private Node[][] path;
 
+    /**
+     * Constructor for A-Star pathfinding algorithm.
+     * @param maze Maze in which we a looking for a path.
+     */
     public Astar(char[][] maze) {
         this.maze = maze;
         this.distance = new int[maze.length][maze[0].length];
@@ -25,36 +31,82 @@ public class Astar {
             }
         }
         que = new PriorityQueue<>();
+        path = new Node[maze.length][maze[0].length];
     }
-    
+
+    /**
+     * Goes through nodes in the grid in order to find the shortest path. Nodes are put in a priority queue when found and the best candidate 
+     * is looked at any given time.
+     * @param startX X-coordinate of the starting node.
+     * @param startY Y-coordinate of the starting node.
+     * @param endX X-coordinate of the goal node.
+     * @param endY Y-coordinate of the goal node.
+     */
     public void findShortestPath(int startX, int startY, int endX, int endY) {
         distance[startX][startY] = 0;
+        boolean found = false;
         que.add(new Node(startX, startY, 0));
-        
-        while(!que.isEmpty()) {
+
+        while (!que.isEmpty()) {
             Node current = que.poll();
             int x = current.getX();
             int y = current.getY();
-            int dist = current.getDistance();
-            
+            int dist = distance[x][y];
+
             if (used[x][y]) {
                 continue;
             }
             used[x][y] = true;
-            
+
             for (Node next : findPossibleNeighbours(x, y)) {
-                if (distance[next.getX()][next.getY()] > dist + next.getDistance()) {
-                    distance[next.getX()][next.getY()] = dist + next.getDistance();
-                    que.add(new Node(next.getX(), next.getY(), distance[next.getX()][next.getY()]));
+                int estimate = (Math.abs(next.getX() - endX) + Math.abs(next.getY() - endY));
+                if (distance[next.getX()][next.getY()] > dist + 1) {
+                    distance[next.getX()][next.getY()] = dist + 1;
+                    que.add(new Node(next.getX(), next.getY(), distance[next.getX()][next.getY()] + estimate));
+                    maze[next.getX()][next.getY()] = '!';
+                    path[next.getX()][next.getY()] = current;
+                    if (next.getX() == endX && next.getY() == endY) {
+                        found = true;
+                        break;
+                    }
                 }
+            }
+            if (found) {
+                break;
             }
         }
     }
-    
+
+    /**
+     * Extracts the shortest path from the class' path array and marks it in the grid.
+     * @param startX X-coordinate of the starting node.
+     * @param startY Y-coordinate of the starting node.
+     * @param endX X-coordinate of the goal node.
+     * @param endY Y-coordinate of the goal node.
+     */
+    public void getShortestPath(int startX, int startY, int endX, int endY) {
+        Stack<Node> stack = new Stack<>();
+        Node node = path[endX][endY];
+        while (node.getX() != startX || node.getY() != startY) {
+            stack.push(node);
+            node = path[node.getX()][node.getY()];
+        }
+        while (!stack.isEmpty()) {
+            node = stack.pop();
+            maze[node.getX()][node.getY()] = '.';
+        }
+    }
+
     public int getDistance(int x, int y) {
         return distance[x][y];
     }
-    
+
+    /**
+     * Determines all possible neighbours for a node in the grid i.e nodes which arent walls.
+     * @param x Current x-coordinate.
+     * @param y Current x-coordinate.
+     * @return Array of neighbour nodes.
+     */
     public ArrayList<Node> findPossibleNeighbours(int x, int y) {
         ArrayList<Node> neighbours = new ArrayList<>();
         int xMin = x - 1;
@@ -87,9 +139,5 @@ public class Astar {
         }
         return neighbours;
     }
-    
-    
-    
-    
-    
+
 }

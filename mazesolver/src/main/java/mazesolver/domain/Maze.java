@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mazesolver.domain;
 
 import java.util.Random;
 
 /**
- *
+ * This class provides implementation for a randomized ascii maze with two exit points and no loops.
  * @author Marko Vainio
  */
 public final class Maze {
@@ -18,7 +13,13 @@ public final class Maze {
     private int startY;
     private int endX;
     private int endY;
-
+    private Random r = new Random();
+    
+/**
+ * The primary constructor with width and height parameters.
+ * @param width
+ * @param height 
+ */
     public Maze(int width, int height) {
         this.maze = new char[width][height];
         initialize();
@@ -26,6 +27,26 @@ public final class Maze {
         createExitpoints();
     }
 
+    /**
+     * Constructor that creates and empty maze, for test purposes.
+     */
+    public Maze() {
+        this.maze = new char[25][25];
+        for (int i = 0; i < maze[0].length; i++) {
+            for (int j = 0; j < maze.length; j++) {
+                if (j == 0 || i == 0 || i == maze[0].length - 1 || j == maze.length - 1) {
+                    maze[j][i] = '@';
+                } else {
+                    maze[j][i] = ' ';
+                }
+            }
+        }
+        createExitpoints();
+    }
+
+    /**
+     * Initializes the grid in which the maze will be made.
+     */
     public void initialize() {
         for (int i = 0; i < maze[0].length; i++) {
             for (int j = 0; j < maze.length; j++) {
@@ -34,6 +55,9 @@ public final class Maze {
         }
     }
 
+    /**
+     * Prints the maze.
+     */
     public void print() {
         for (int i = 0; i < maze[0].length; i++) {
             for (int j = 0; j < maze.length; j++) {
@@ -44,8 +68,10 @@ public final class Maze {
         System.out.println("----------------------------------------");
     }
 
+    /**
+     * Creates the middle section of the maze. Starts the recursive process from the middle of the grid.
+     */
     public void createMiddle() {
-        Random r = new Random();
         int beginX = maze.length / 2;
         if (beginX % 2 != 1) {
             beginX++;
@@ -57,9 +83,12 @@ public final class Maze {
         generateMaze(beginX, beginY);
     }
 
+    /**
+     * Creates start and goal points for the maze.
+     */
     public void createExitpoints() {
         int x = 0;
-        int y = maze[0].length / 2;
+        int y = 1;
         if (maze[x + 1][y] != ' ') {
             y++;
         }
@@ -67,27 +96,41 @@ public final class Maze {
         this.startX = x;
         this.startY = y;
         x = maze.length - 1;
+        y = maze[0].length - 1;
         if (maze[x - 1][y] != ' ') {
-            y++;
+            y--;
         }
         maze[x][y] = ' ';
         this.endX = x;
         this.endY = y;
     }
 
+    /**
+     * Recursive method that determines which way the maze will be continued.
+     * @param x Current x-coordinate
+     * @param y Current y-coordinate
+     */
     public void generateMaze(int x, int y) {
-        Random r = new Random();
         String[] directions = new String[4];
+        int directionsCount = 0;
+        String direction = "";
         while (true) {
-            int directionsCount = possibleDirections(x, y, directions);
+            directionsCount = possibleDirections(x, y, directions);
             if (directionsCount == 0) {
                 break;
             }
-            String direction = directions[r.nextInt(directionsCount)];
+            direction = directions[r.nextInt(directionsCount)];
+
             proceed(direction, x, y);
         }
     }
 
+    /**
+     * Proceeds the grid to the given direction.
+     * @param direction Direction in which to proceed.
+     * @param x Current x-coordinate
+     * @param y Current y-coordinate 
+     */
     public void proceed(String direction, int x, int y) {
         if (direction == "up") {
             maze[x][y - 1] = ' ';
@@ -112,11 +155,18 @@ public final class Maze {
         generateMaze(x, y);
     }
 
+    /**
+     * Checks for possible directions to proceed and returns the count.
+     * @param x Current x-coordinate
+     * @param y Current y-coordinate 
+     * @param directions Array of possible directions.
+     * @return Return count of possible directions.
+     */
     public int possibleDirections(int x, int y, String[] directions) {
         int directionsCount = 0;
         if (x - 2 > 0 && maze[x - 2][y] != ' ' && maze[x - 2][y - 1] != ' ' && maze[x - 2][y + 1] != ' ' && maze[x - 3][y] != ' ') {
-                directions[directionsCount] = "left";
-                directionsCount++;
+            directions[directionsCount] = "left";
+            directionsCount++;
         }
         if (y + 2 < maze[0].length - 1 && maze[x][y + 2] != ' ' && maze[x + 1][y + 2] != ' ' && maze[x - 1][y + 2] != ' ' && maze[x][y + 3] != ' ') {
             directions[directionsCount] = "down";
@@ -127,13 +177,8 @@ public final class Maze {
             directionsCount++;
         }
         if (x + 2 < maze.length - 1 && maze[x + 2][y] != ' ' && maze[x + 2][y + 1] != ' ' && maze[x + 2][y - 1] != ' ' && maze[x + 3][y] != ' ') {
-            if (x + 3 >= maze.length - 1) {
-                directions[directionsCount] = "right";
-                directionsCount++;
-            } else if (maze[x + 2][y] != ' ') {
-                directions[directionsCount] = "right";
-                directionsCount++;
-            }
+            directions[directionsCount] = "right";
+            directionsCount++;
         }
         return directionsCount;
     }
@@ -157,7 +202,5 @@ public final class Maze {
     public int getStartY() {
         return startY;
     }
-    
-    
 
 }
