@@ -12,11 +12,11 @@ public class Main {
     public static void main(String[] args) {
         
         Maze maze = new Maze(51,11);
-        Astar astar = new Astar(maze.getMaze());
+        Astar astar = new Astar(maze);
         System.out.println(astar.getDistance(maze.getStartX(), maze.getStartY()));
-        astar.findShortestPath(maze.getStartX(), maze.getStartY(), maze.getEndX(), maze.getEndY());
+        astar.findShortestPath();
         int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
-        astar.getShortestPath(maze.getStartX(), maze.getStartY(), maze.getEndX(), maze.getEndY());
+        astar.getShortestPath();
         maze.print();
         System.out.println(dist);
 

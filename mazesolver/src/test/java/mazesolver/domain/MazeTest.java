@@ -54,8 +54,8 @@ public class MazeTest {
     @Test
     public void shortestPathIsFound() {
         Maze maze = new Maze(11, 11);
-        Astar astar = new Astar(maze.getMaze());
-        astar.findShortestPath(maze.getStartX(), maze.getStartY(), maze.getEndX(), maze.getEndY());
+        Astar astar = new Astar(maze);
+        astar.findShortestPath();
         assertTrue(astar.getDistance(maze.getEndX(), maze.getEndY()) != 1000000000);
     }
 

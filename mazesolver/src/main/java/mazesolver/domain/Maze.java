@@ -112,8 +112,8 @@ public final class Maze {
      */
     public void generateMaze(int x, int y) {
         String[] directions = new String[4];
-        int directionsCount = 0;
-        String direction = "";
+        int directionsCount;
+        String direction;
         while (true) {
             directionsCount = possibleDirections(x, y, directions);
             if (directionsCount == 0) {
