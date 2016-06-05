@@ -3,6 +3,7 @@ package mazesolver.logic;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
+import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 
@@ -74,7 +75,6 @@ public class Astar {
                     }
                 }
             }
-            maze.print();
             if (found) {
                 break;
             }
@@ -86,7 +86,7 @@ public class Astar {
      * grid.
      */
     public void getShortestPath() {
-        Stack<Node> stack = new Stack<>();
+        MyStack<Node> stack = new MyStack<>();
         Node node = new Node(maze.getEndX(), maze.getEndY(), 0);
         while (node.getX() != maze.getStartX() || node.getY() != maze.getStartY()) {
             stack.push(node);

@@ -1,7 +1,11 @@
 package mazesolver;
 
+import java.util.Stack;
+import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
+import mazesolver.domain.Node;
 import mazesolver.logic.Astar;
+import mazesolver.logic.IDA;
 
 /**
  *
@@ -11,14 +15,26 @@ public class Main {
 
     public static void main(String[] args) {
         
-        Maze maze = new Maze(51,11);
+        Maze maze = new Maze(101,21);
         Astar astar = new Astar(maze);
-        System.out.println(astar.getDistance(maze.getStartX(), maze.getStartY()));
+//        IDA ida = new IDA(maze);
+//        System.out.println(astar.getDistance(maze.getStartX(), maze.getStartY()));
         astar.findShortestPath();
-        int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
         astar.getShortestPath();
+//        System.out.println(ida.idaSolve());
+//        ida.getShortestPath();
+//        maze.print();
+//        
+        
         maze.print();
-        System.out.println(dist);
+//        int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
+//        System.out.println(dist);
+        
+        MyStack<Integer> stack = new MyStack<>();
+        stack.push(10);
+        stack.push(null);
+        stack.push(5);
+        System.out.println(5 == stack.pop());
 
     }
 }
