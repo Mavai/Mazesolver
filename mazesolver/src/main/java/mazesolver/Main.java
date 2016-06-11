@@ -1,6 +1,6 @@
 package mazesolver;
 
-import java.util.Stack;
+import mazesolver.data_structures.MyArrayList;
 import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
@@ -29,12 +29,12 @@ public class Main {
         maze.print();
 //        int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
 //        System.out.println(dist);
-        
-        MyStack<Integer> stack = new MyStack<>();
-        stack.push(10);
-        stack.push(null);
-        stack.push(5);
-        System.out.println(5 == stack.pop());
+        MyArrayList<Integer> list = new MyArrayList<>(3);
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.remove(0);
+        System.out.println("");
 
     }
 }

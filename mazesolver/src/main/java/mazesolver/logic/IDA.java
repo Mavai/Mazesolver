@@ -1,7 +1,6 @@
 package mazesolver.logic;
 
-import java.util.ArrayList;
-import java.util.Stack;
+import mazesolver.data_structures.MyArrayList;
 import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
@@ -84,8 +83,8 @@ public class IDA {
         grid[maze.getStartX()][maze.getStartY()] = '.';
     }
 
-    public ArrayList<Node> findPossibleNeighbours(int x, int y) {
-        ArrayList<Node> neighbours = new ArrayList<>();
+    public MyArrayList<Node> findPossibleNeighbours(int x, int y) {
+        MyArrayList<Node> neighbours = new MyArrayList<>();
         int xMin = x - 1;
         int xMax = x + 1;
         int yMin = y - 1;

@@ -6,7 +6,6 @@
 package mazesolver.logic;
 
 import mazesolver.domain.Maze;
-import mazesolver.logic.Astar;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
