@@ -6,6 +6,7 @@ import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 
 /**
+ * Offers implementation for an IDA pathfinding algorithm.
  *
  * @author Marko Vainio
  */
@@ -17,12 +18,24 @@ public class IDA {
     private boolean[][] used;
     private final Node[][] path;
 
+    /**
+     * Constructor for an IDA algorithm.
+     *
+     * @param maze The maze where we are looking for a path.
+     */
     public IDA(Maze maze) {
         this.maze = maze;
         this.grid = maze.getMaze();
         path = new Node[grid.length][grid[0].length];
     }
 
+    /**
+     * The main algorithm which performs multiple Depth-First-Searches in the
+     * maze with different limitations.
+     *
+     * @return Returns the length of the shortest path nad -1 if one isn't
+     * found.
+     */
     public int idaSolve() {
         Node root = new Node(maze.getStartX(), maze.getStartY(), 0);
         int limit = Math.abs(root.getX() - maze.getEndX()) + Math.abs(root.getY() - maze.getEndY());
@@ -36,10 +49,17 @@ public class IDA {
                 return -1;
             }
             limit = t;
-            
         }
     }
 
+    /**
+     * Depth-First-Search algorithm.
+     *
+     * @param node Node where the algorithm starts the recursive process.
+     * @param g Current depth.
+     * @param limit Length of current best path.
+     * @return Length of current best path.
+     */
     private int search(Node node, int g, int limit) {
         grid[node.getX()][node.getY()] = '$';
         int f = g + Math.abs(node.getX() - maze.getEndX()) + Math.abs(node.getY() - maze.getEndY());
@@ -68,7 +88,10 @@ public class IDA {
         }
         return min;
     }
-    
+
+    /**
+     * Gets the nodes from the shortest path.
+     */
     public void getShortestPath() {
         MyStack<Node> stack = new MyStack<>();
         Node node = new Node(maze.getEndX(), maze.getEndY(), 0);
@@ -83,6 +106,13 @@ public class IDA {
         grid[maze.getStartX()][maze.getStartY()] = '.';
     }
 
+    /**
+     * Verifies node's possible neighbours.
+     *
+     * @param x Current X-coordinate.
+     * @param y Current y-coordinate.
+     * @return Returns list of possible neighbour nodes.
+     */
     public MyArrayList<Node> findPossibleNeighbours(int x, int y) {
         MyArrayList<Node> neighbours = new MyArrayList<>();
         int xMin = x - 1;

@@ -1,5 +1,6 @@
 package mazesolver;
 
+import mazesolver.data_structures.MyPriorityQueue;
 import mazesolver.data_structures.MyArrayList;
 import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
@@ -29,12 +30,6 @@ public class Main {
         maze.print();
 //        int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
 //        System.out.println(dist);
-        MyArrayList<Integer> list = new MyArrayList<>(3);
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.remove(0);
-        System.out.println("");
 
     }
 }

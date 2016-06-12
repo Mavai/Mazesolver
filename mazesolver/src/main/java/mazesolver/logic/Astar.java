@@ -1,7 +1,7 @@
 package mazesolver.logic;
 
-import java.util.PriorityQueue;
 import mazesolver.data_structures.MyArrayList;
+import mazesolver.data_structures.MyPriorityQueue;
 import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
@@ -23,7 +23,7 @@ public class Astar {
     /**
      * Constructor for A-Star pathfinding algorithm.
      *
-     * @param maze Maze in which we a looking for a path.
+     * @param maze Maze in which we aare looking for a path.
      */
     public Astar(Maze maze) {
         this.maze = maze;
@@ -45,7 +45,7 @@ public class Astar {
      *
      */
     public void findShortestPath() {
-        PriorityQueue<Node> que = new PriorityQueue<>();
+        MyPriorityQueue<Node> que = new MyPriorityQueue<>();
         distance[maze.getStartX()][maze.getStartY()] = 0;
         boolean found = false;
         que.add(new Node(maze.getStartX(), maze.getStartY(), 0));

@@ -57,5 +57,14 @@ public class MyArrayListTest {
         list.remove(0);
         assertTrue(list.size() == 2 && list.get(0) == 2 && list.get(2) == null);
     }
+    
+    @Test
+    public void listGrowsCorrectly() {
+        list = new MyArrayList<>(2);
+        list.add(2);
+        list.add(2);
+        list.add(2);
+        assertEquals(4, list.tableSize());
+    }
 
 }
