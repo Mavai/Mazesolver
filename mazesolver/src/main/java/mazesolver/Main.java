@@ -7,6 +7,7 @@ import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 import mazesolver.logic.Astar;
 import mazesolver.logic.IDA;
+import mazesolver.performance_tests.PerformanceTest;
 
 /**
  *
@@ -15,21 +16,9 @@ import mazesolver.logic.IDA;
 public class Main {
 
     public static void main(String[] args) {
-        
-        Maze maze = new Maze(101,21);
-        Astar astar = new Astar(maze);
-//        IDA ida = new IDA(maze);
-//        System.out.println(astar.getDistance(maze.getStartX(), maze.getStartY()));
-        astar.findShortestPath();
-        astar.getShortestPath();
-//        System.out.println(ida.idaSolve());
-//        ida.getShortestPath();
-//        maze.print();
-//        
-        
-        maze.print();
-//        int dist = astar.getDistance(maze.getEndX(), maze.getEndY());
-//        System.out.println(dist);
+        PerformanceTest test = new PerformanceTest();
+        System.out.println(test.getAstarResult());
+        System.out.println(test.getIdaResult());
 
     }
 }
