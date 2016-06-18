@@ -25,7 +25,7 @@ public class PerformanceTest {
             maze = new Maze(201, 201);
             Astar astar = new Astar(maze);
             long startTime = System.currentTimeMillis();
-            astar.findShortestPath();
+            astar.solve();
             long endTime = System.currentTimeMillis();
             result += endTime - startTime;
         }

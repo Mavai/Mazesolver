@@ -1,13 +1,15 @@
 
 package mazesolver.domain;
 
+import java.util.Objects;
+
 /**
  * This class provides implementation for Nodes in a grid.
  * @author Marko Vainio
  */
 public class Node implements Comparable<Node>{
-    private final int x;
-    private final int y;
+    private final Integer x;
+    private final Integer y;
     private final Integer distance;
 
     /**
@@ -36,6 +38,9 @@ public class Node implements Comparable<Node>{
 
     @Override
     public int compareTo(Node o) {
+        if (Objects.equals(distance, o.distance)) {
+            return o.y.compareTo(y);
+        }
         return distance.compareTo(o.distance);
     }
     

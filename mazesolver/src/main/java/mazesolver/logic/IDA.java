@@ -25,7 +25,7 @@ public class IDA {
      */
     public IDA(Maze maze) {
         this.maze = maze;
-        this.grid = maze.getMaze();
+        this.grid = maze.getGrid();
         path = new Node[grid.length][grid[0].length];
     }
 

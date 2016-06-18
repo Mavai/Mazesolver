@@ -48,14 +48,14 @@ public class MazeTest {
     @Test
     public void twoExits() {
         Maze maze = new Maze(11, 11);
-        assertTrue((maze.getStartX() == 0 && maze.getStartY() != 0 && maze.getEndX() == maze.getMaze().length - 1 && maze.getEndY() != 0));
+        assertTrue((maze.getStartX() == 0 && maze.getStartY() != 0 && maze.getEndX() == maze.getGrid().length - 1 && maze.getEndY() != 0));
     }
     
     @Test
     public void shortestPathIsFound() {
         Maze maze = new Maze(11, 11);
         Astar astar = new Astar(maze);
-        astar.findShortestPath();
+        astar.solve();
         assertTrue(astar.getDistance(maze.getEndX(), maze.getEndY()) != 1000000000);
     }
 

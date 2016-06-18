@@ -183,7 +183,7 @@ public final class Maze {
         return directionsCount;
     }
 
-    public char[][] getMaze() {
+    public char[][] getGrid() {
         return maze;
     }
 

@@ -1,13 +1,8 @@
 package mazesolver;
 
-import mazesolver.data_structures.MyPriorityQueue;
-import mazesolver.data_structures.MyArrayList;
-import mazesolver.data_structures.MyStack;
+import javax.swing.SwingUtilities;
+import mazesolver.GUI.MazeGui;
 import mazesolver.domain.Maze;
-import mazesolver.domain.Node;
-import mazesolver.logic.Astar;
-import mazesolver.logic.IDA;
-import mazesolver.performance_tests.PerformanceTest;
 
 /**
  *
@@ -16,9 +11,9 @@ import mazesolver.performance_tests.PerformanceTest;
 public class Main {
 
     public static void main(String[] args) {
-        PerformanceTest test = new PerformanceTest();
-        System.out.println(test.getAstarResult());
-        System.out.println(test.getIdaResult());
+        Maze maze = new Maze(51, 21);
+        MazeGui gui = new MazeGui(maze);
+        SwingUtilities.invokeLater(gui);
 
     }
 }

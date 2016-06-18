@@ -42,7 +42,7 @@ public class AstarTest {
     public void shortestPathIsFound() {
         Maze maze = new Maze(11, 11);
         Astar astar = new Astar(maze);
-        astar.findShortestPath();
+        astar.solve();
         assertTrue(astar.getDistance(maze.getEndX(), maze.getEndY()) != 1000000000);
     }
     
@@ -51,7 +51,7 @@ public class AstarTest {
         Maze maze = new Maze(51, 51);
         IDA ida = new IDA(maze);
         Astar astar = new Astar(maze);
-        astar.findShortestPath();
+        astar.solve();
         assertTrue(ida.idaSolve() == astar.getDistance(maze.getEndX(), maze.getEndY()));
     }
 }

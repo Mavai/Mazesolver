@@ -50,7 +50,7 @@ public class IDATest {
         Maze maze = new Maze(51, 51);
         IDA ida = new IDA(maze);
         Astar astar = new Astar(maze);
-        astar.findShortestPath();
+        astar.solve();
         assertTrue(ida.idaSolve() == astar.getDistance(maze.getEndX(), maze.getEndY()));
     }
 }

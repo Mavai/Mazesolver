@@ -1,5 +1,6 @@
 package mazesolver.logic;
 
+import java.util.ArrayDeque;
 import mazesolver.data_structures.MyArrayList;
 import mazesolver.data_structures.MyPriorityQueue;
 import mazesolver.data_structures.MyStack;
@@ -19,6 +20,8 @@ public class Astar {
     private final Maze maze;
     private final Node[][] path;
     private final char[][] grid;
+    private final MyArrayList<Node> shortestPath;
+    private final ArrayDeque<Node> visitedNodes;
 
     /**
      * Constructor for A-Star pathfinding algorithm.
@@ -27,7 +30,7 @@ public class Astar {
      */
     public Astar(Maze maze) {
         this.maze = maze;
-        this.grid = maze.getMaze();
+        this.grid = maze.getGrid();
         this.distance = new int[grid.length][grid[0].length];
         this.used = new boolean[grid.length][grid[0].length];
         for (int i = 0; i < distance[0].length; i++) {
@@ -35,7 +38,9 @@ public class Astar {
                 distance[j][i] = 1000000000;
             }
         }
-        path = new Node[grid.length][grid[0].length];
+        this.path = new Node[grid.length][grid[0].length];
+        this.shortestPath = new MyArrayList<>();
+        this.visitedNodes = new ArrayDeque<>();
     }
 
     /**
@@ -44,7 +49,7 @@ public class Astar {
      * at any given time.
      *
      */
-    public void findShortestPath() {
+    public void solve() {
         MyPriorityQueue<Node> que = new MyPriorityQueue<>();
         distance[maze.getStartX()][maze.getStartY()] = 0;
         boolean found = false;
@@ -60,13 +65,13 @@ public class Astar {
                 continue;
             }
             used[x][y] = true;
+            visitedNodes.add(current);
 
             for (Node next : findPossibleNeighbours(x, y)) {
                 int estimate = (Math.abs(next.getX() - maze.getEndX()) + Math.abs(next.getY() - maze.getEndY()));
                 if (distance[next.getX()][next.getY()] > dist + 1) {
                     distance[next.getX()][next.getY()] = dist + 1;
                     que.add(new Node(next.getX(), next.getY(), distance[next.getX()][next.getY()] + estimate));
-                    grid[next.getX()][next.getY()] = '!';
                     path[next.getX()][next.getY()] = current;
                     if (next.getX() == maze.getEndX() && next.getY() == maze.getEndY()) {
                         found = true;
@@ -84,7 +89,10 @@ public class Astar {
      * Extracts the shortest path from the class' path array and marks it in the
      * grid.
      */
-    public void getShortestPath() {
+    public void findShortestPath() {
+        if (distance[maze.getEndX()][maze.getEndY()] == 1000000000) {
+            return;
+        }
         MyStack<Node> stack = new MyStack<>();
         Node node = new Node(maze.getEndX(), maze.getEndY(), 0);
         while (node.getX() != maze.getStartX() || node.getY() != maze.getStartY()) {
@@ -93,9 +101,17 @@ public class Astar {
         }
         while (!stack.isEmpty()) {
             node = stack.pop();
-            grid[node.getX()][node.getY()] = '.';
+            shortestPath.add(node);
         }
-        grid[maze.getStartX()][maze.getStartY()] = '.';
+        shortestPath.add(new Node(maze.getStartX(), maze.getStartY(), 1));
+    }
+
+    public MyArrayList<Node> getShortestPath() {
+        return shortestPath;
+    }
+
+    public ArrayDeque<Node> getVisitedNodes() {
+        return visitedNodes;
     }
 
     public int getDistance(int x, int y) {
