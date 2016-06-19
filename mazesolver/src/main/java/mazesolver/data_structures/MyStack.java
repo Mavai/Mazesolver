@@ -24,7 +24,8 @@ public class MyStack<Item> {
      *
      * @param initialSize Size of the stack.
      */
-    public MyStack(int initialSize) {
+    @SuppressWarnings("unchecked")
+	public MyStack(int initialSize) {
         table = (Item[]) new Object[initialSize];
         top = -1;
     }
@@ -80,7 +81,8 @@ public class MyStack<Item> {
     /**
      * Doubles the stack's size.
      */
-    public void doubleSize() {
+    @SuppressWarnings("unchecked")
+	public void doubleSize() {
         Item[] newTable = (Item[]) new Object[table.length * 2];
         for (int i = 0; i < table.length; i++) {
             newTable[i] = table[i];

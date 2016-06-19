@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayDeque;
 import javax.swing.*;
 import mazesolver.data_structures.MyArrayList;
+import mazesolver.data_structures.MyQueue;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 
@@ -21,7 +22,7 @@ public class MazeGui extends JFrame implements Runnable {
     private Maze maze;
     private final JLabel[][] grid;
     private MyArrayList<Node> currentShortestPath;
-    private ArrayDeque<Node> visitedNodes;
+    private MyQueue<Node> visitedNodes;
 
     public MazeGui(Maze maze) {
         super("Miinaharava");
@@ -29,7 +30,7 @@ public class MazeGui extends JFrame implements Runnable {
         this.maze = maze;
         this.grid = new JLabel[maze.getGrid().length][maze.getGrid()[0].length];
         this.currentShortestPath = new MyArrayList<>();
-        this.visitedNodes = new ArrayDeque<>();
+        this.visitedNodes = new MyQueue<>();
     }
 
     private void createComponents(Container container) {
@@ -55,6 +56,11 @@ public class MazeGui extends JFrame implements Runnable {
         solveAstarButton.setAlignmentX(CENTER_ALIGNMENT);
         solveAstarButton.addActionListener(new MenuButtonListener(solveAstarButton, this));
         menu.add(solveAstarButton);
+        menu.add(Box.createRigidArea(new Dimension(0, 20)));
+        JButton solveIDAButton = new JButton("Ratkaise käyttäen IDA*");
+        solveIDAButton.setAlignmentX(CENTER_ALIGNMENT);
+        solveIDAButton.addActionListener(new MenuButtonListener(solveIDAButton, this));
+        menu.add(solveIDAButton);
         menu.add(Box.createRigidArea(new Dimension(170, 0)));
         return menu;
     }
@@ -66,6 +72,7 @@ public class MazeGui extends JFrame implements Runnable {
                 JLabel cell = new JLabel();
                 editCell(cell, j, i);
                 cell.addMouseListener(new MazeMouseListener(this, cell, j, i));
+                cell.setName("unmarked");
                 grid[j][i] = cell;
                 ruudukko.add(cell);
             }
@@ -74,8 +81,9 @@ public class MazeGui extends JFrame implements Runnable {
     }
 
     public void reprint() {
+        clearPreviousMarks();
         currentShortestPath = new MyArrayList<>();
-        visitedNodes = new ArrayDeque<>();
+        visitedNodes = new MyQueue<>();
         this.maze = new Maze(maze.getGrid().length, maze.getGrid()[0].length);
         for (int i = 0; i < maze.getGrid()[0].length; i++) {
             for (int j = 0; j < maze.getGrid().length; j++) {
@@ -92,18 +100,25 @@ public class MazeGui extends JFrame implements Runnable {
         for (Node node : currentShortestPath) {
             if (maze.getGrid()[node.getX()][node.getY()] == ' ') {
                 grid[node.getX()][node.getY()].setBackground(null);
+                grid[node.getX()][node.getY()].setName("unmarked");
             }
         }
         while (!visitedNodes.isEmpty()) {
             Node node = visitedNodes.poll();
             if (maze.getGrid()[node.getX()][node.getY()] == ' ') {
                 grid[node.getX()][node.getY()].setBackground(null);
+                grid[node.getX()][node.getY()].setName("unmarked");
             }
         }
     }
 
-    public void markVisitedNodes() {
-        Timer timer = new Timer(10, new TimerListener(visitedNodes.clone(), this));
+    public void markVisitedNodes(String algorithm) {
+        Timer timer = null;
+        if (algorithm.equals("A*")) {
+            timer = new Timer(10, new TimerListener(visitedNodes.clone(), this));
+        } else if (algorithm.equals("IDA*")) {
+            timer = new Timer(1, new TimerListener(visitedNodes.clone(), this));
+        }
         timer.start();
     }
 
@@ -137,7 +152,7 @@ public class MazeGui extends JFrame implements Runnable {
         return maze;
     }
 
-    public void setVisitedNodes(ArrayDeque<Node> visitedNodes) {
+    public void setVisitedNodes(MyQueue<Node> visitedNodes) {
         this.visitedNodes = visitedNodes;
     }
 

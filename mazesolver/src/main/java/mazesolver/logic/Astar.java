@@ -3,6 +3,7 @@ package mazesolver.logic;
 import java.util.ArrayDeque;
 import mazesolver.data_structures.MyArrayList;
 import mazesolver.data_structures.MyPriorityQueue;
+import mazesolver.data_structures.MyQueue;
 import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
@@ -21,7 +22,7 @@ public class Astar {
     private final Node[][] path;
     private final char[][] grid;
     private final MyArrayList<Node> shortestPath;
-    private final ArrayDeque<Node> visitedNodes;
+    private final MyQueue<Node> visitedNodes;
 
     /**
      * Constructor for A-Star pathfinding algorithm.
@@ -40,7 +41,7 @@ public class Astar {
         }
         this.path = new Node[grid.length][grid[0].length];
         this.shortestPath = new MyArrayList<>();
-        this.visitedNodes = new ArrayDeque<>();
+        this.visitedNodes = new MyQueue<>();
     }
 
     /**
@@ -110,7 +111,7 @@ public class Astar {
         return shortestPath;
     }
 
-    public ArrayDeque<Node> getVisitedNodes() {
+    public MyQueue<Node> getVisitedNodes() {
         return visitedNodes;
     }
 

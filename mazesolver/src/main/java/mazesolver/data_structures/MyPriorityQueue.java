@@ -17,7 +17,8 @@ public class MyPriorityQueue<Item extends Comparable<Item>> {
      *
      * @param initialSize
      */
-    public MyPriorityQueue(int initialSize) {
+    @SuppressWarnings("unchecked")
+	public MyPriorityQueue(int initialSize) {
         table = (Item[]) new Comparable[initialSize];
         size = 0;
     }
@@ -124,7 +125,8 @@ public class MyPriorityQueue<Item extends Comparable<Item>> {
     /**
      * Doubles the size of the array.
      */
-    public void doubleSize() {
+    @SuppressWarnings("unchecked")
+	public void doubleSize() {
         Item[] newTable = (Item[]) new Comparable[table.length * 2];
         for (int i = 0; i < table.length; i++) {
             newTable[i] = table[i];

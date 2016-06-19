@@ -3,8 +3,8 @@ package mazesolver.GUI;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayDeque;
 import javax.swing.Timer;
+import mazesolver.data_structures.MyQueue;
 import mazesolver.domain.Node;
 
 /**
@@ -13,24 +13,33 @@ import mazesolver.domain.Node;
  */
 public class TimerListener implements ActionListener {
 
-    private ArrayDeque<Node> path;
+    private MyQueue<Node> path;
     private MazeGui mainFrame;
 
-    public TimerListener(ArrayDeque<Node> path, MazeGui mainFrame) {
+    public TimerListener(MyQueue<Node> path, MazeGui mainFrame) {
         this.path = path;
         this.mainFrame = mainFrame;
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Node node;
         Timer timer = (Timer) e.getSource();
         if (path.isEmpty()) {
             timer.stop();
             mainFrame.markShortestPath();
             return;
         }
-        Node node = path.poll();
-        mainFrame.getGrid()[node.getX()][node.getY()].setBackground(new Color(128, 255, 128));
+        node = path.poll();
+        if (mainFrame.getGrid()[node.getX()][node.getY()].getName().equals("") || mainFrame.getGrid()[node.getX()][node.getY()].getName().equals("unmarked")) {
+            mainFrame.getGrid()[node.getX()][node.getY()].setBackground(new Color(128, 255, 128));
+            mainFrame.getGrid()[node.getX()][node.getY()].setName("marked");
+        } else {
+            mainFrame.getGrid()[node.getX()][node.getY()].setBackground(null);
+            mainFrame.getGrid()[node.getX()][node.getY()].setName("unmarked");
+        }
+
     }
 
 }

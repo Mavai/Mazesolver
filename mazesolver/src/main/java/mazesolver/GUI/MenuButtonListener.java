@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import mazesolver.logic.Astar;
+import mazesolver.logic.IDA;
 
 /**
  *
@@ -35,8 +36,15 @@ public class MenuButtonListener implements ActionListener{
             astar.findShortestPath();
             mainFrame.clearPreviousMarks();
             mainFrame.setVisitedNodes(astar.getVisitedNodes());
-            mainFrame.markVisitedNodes();
+            mainFrame.markVisitedNodes("A*");
             mainFrame.setCurrentShortestPath(astar.getShortestPath());
+        }
+        if (pressed.getText().equals("Ratkaise käyttäen IDA*")) {
+            IDA ida = new IDA(mainFrame.getMaze());
+            ida.idaSolve();
+            mainFrame.clearPreviousMarks();
+            mainFrame.setVisitedNodes(ida.getVisited());
+            mainFrame.markVisitedNodes("IDA*");
         }
     }
     

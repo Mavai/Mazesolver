@@ -1,6 +1,8 @@
 package mazesolver.logic;
 
+import java.util.ArrayDeque;
 import mazesolver.data_structures.MyArrayList;
+import mazesolver.data_structures.MyQueue;
 import mazesolver.data_structures.MyStack;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
@@ -17,6 +19,7 @@ public class IDA {
     private boolean found;
     private boolean[][] used;
     private final Node[][] path;
+    private MyQueue<Node> visited;
 
     /**
      * Constructor for an IDA algorithm.
@@ -27,6 +30,7 @@ public class IDA {
         this.maze = maze;
         this.grid = maze.getGrid();
         path = new Node[grid.length][grid[0].length];
+        visited = new MyQueue<>();
     }
 
     /**
@@ -61,9 +65,10 @@ public class IDA {
      * @return Length of current best path.
      */
     private int search(Node node, int g, int limit) {
-        grid[node.getX()][node.getY()] = '$';
+        visited.add(node);
         int f = g + Math.abs(node.getX() - maze.getEndX()) + Math.abs(node.getY() - maze.getEndY());
         if (f > limit) {
+            visited.add(node);
             return f;
         }
         if (node.getX() == maze.getEndX() && node.getY() == maze.getEndY()) {
@@ -86,6 +91,7 @@ public class IDA {
             }
 
         }
+        visited.add(node);
         return min;
     }
 
@@ -144,6 +150,10 @@ public class IDA {
             neighbours.add(new Node(xMin, y, 1));
         }
         return neighbours;
+    }
+
+    public MyQueue<Node> getVisited() {
+        return visited;
     }
 
 }

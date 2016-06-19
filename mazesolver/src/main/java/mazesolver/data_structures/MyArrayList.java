@@ -18,7 +18,8 @@ public class MyArrayList<Item> implements Iterable<Item> {
      *
      * @param initialSize Size of the list.
      */
-    public MyArrayList(int initialSize) {
+    @SuppressWarnings("unchecked")
+	public MyArrayList(int initialSize) {
         if (initialSize > 0) {
             table = (Item[]) new Object[initialSize];
         } else {
@@ -36,7 +37,8 @@ public class MyArrayList<Item> implements Iterable<Item> {
     /**
      * Doubles the size of the array.
      */
-    public void doubleSize() {
+    @SuppressWarnings("unchecked")
+	public void doubleSize() {
         Item[] newTable = (Item[]) new Object[table.length * 2];
         for (int i = 0; i < table.length; i++) {
             newTable[i] = table[i];
@@ -60,7 +62,7 @@ public class MyArrayList<Item> implements Iterable<Item> {
     /**
      * Returns an item from the specified index.
      *
-     * @param Index Index of the item.
+     * @param index Index of the item.
      * @return Item from the index.
      */
     public Item get(int index) {
@@ -96,7 +98,7 @@ public class MyArrayList<Item> implements Iterable<Item> {
 
     @Override
     public Iterator<Item> iterator() {
-        Iterator iterator = new Iterator<Item>() {
+        Iterator<Item> iterator = new Iterator<Item>() {
             private int cursor = 0;
 
             @Override
