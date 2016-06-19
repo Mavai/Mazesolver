@@ -1,9 +1,6 @@
 package mazesolver.logic;
 
-import java.util.ArrayDeque;
-import mazesolver.data_structures.MyArrayList;
-import mazesolver.data_structures.MyQueue;
-import mazesolver.data_structures.MyStack;
+import mazesolver.data_structures.*;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 
@@ -14,12 +11,12 @@ import mazesolver.domain.Node;
  */
 public class IDA {
 
-    private Maze maze;
-    private char[][] grid;
+    private final Maze maze;
+    private final char[][] grid;
     private boolean found;
     private boolean[][] used;
     private final Node[][] path;
-    private MyQueue<Node> visited;
+    private final MyQueue<Node> visited;
 
     /**
      * Constructor for an IDA algorithm.

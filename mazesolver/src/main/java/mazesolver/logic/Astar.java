@@ -1,10 +1,6 @@
 package mazesolver.logic;
 
-import java.util.ArrayDeque;
-import mazesolver.data_structures.MyArrayList;
-import mazesolver.data_structures.MyPriorityQueue;
-import mazesolver.data_structures.MyQueue;
-import mazesolver.data_structures.MyStack;
+import mazesolver.data_structures.*;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 

@@ -1,8 +1,7 @@
 package mazesolver.GUI;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.Timer;
 import mazesolver.data_structures.MyQueue;
 import mazesolver.domain.Node;

@@ -6,10 +6,8 @@
 package mazesolver.GUI;
 
 import java.awt.*;
-import java.util.ArrayDeque;
 import javax.swing.*;
-import mazesolver.data_structures.MyArrayList;
-import mazesolver.data_structures.MyQueue;
+import mazesolver.data_structures.*;
 import mazesolver.domain.Maze;
 import mazesolver.domain.Node;
 

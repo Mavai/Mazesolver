@@ -3,7 +3,7 @@ package mazesolver.data_structures;
 import java.util.Iterator;
 
 /**
- * Offers implementation for an ArraList.
+ * Offers implementation for an ArrayList.
  *
  * @author Marko Vainio
  * @param <Item> Type of items which are stored in the list.

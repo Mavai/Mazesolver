@@ -1,20 +1,26 @@
-
 package mazesolver.data_structures;
 
 import java.util.Arrays;
 
 /**
+ * Offers implementation for an ArrayDeque. The queue's size is doubled whenever
+ * an addition to a full queue is made.
  *
  * @author Marko Vainio
  * @param <Item>
  */
 public class MyQueue<Item> {
+
     private Item[] table;
     private int head;
     private int tail;
 
-    @SuppressWarnings("unchecked")
-	public MyQueue(int initialSize) {
+    /**
+     * Constructor where the user can set a size for the queue.
+     *
+     * @param initialSize
+     */
+    public MyQueue(int initialSize) {
         head = 0;
         tail = 0;
         if (initialSize > 0) {
@@ -24,14 +30,27 @@ public class MyQueue<Item> {
         }
     }
 
+    /**
+     * Constructor where the queue's default size is 10.
+     */
     public MyQueue() {
         this(10);
     }
-    
+
+    /**
+     * Checks whether the queue is empty.
+     *
+     * @return Returns true is the queue is empty.
+     */
     public boolean isEmpty() {
         return head == tail;
     }
-    
+
+    /**
+     * Checks whether the queue is full.
+     *
+     * @return Returns true is the queue is full.
+     */
     public boolean isFull() {
         int tailnext = tail + 1;
         if (tailnext == table.length) {
@@ -39,7 +58,10 @@ public class MyQueue<Item> {
         }
         return tailnext == head;
     }
-    
+
+    /**
+     * Doubles the array's size.
+     */
     public void doubleSize() {
         int start = 0;
         int max = Math.min(tail, table.length - 1);
@@ -58,7 +80,12 @@ public class MyQueue<Item> {
         tail = start;
         table = newTable;
     }
-    
+
+    /**
+     * Adds an item to the tail of the queue.
+     *
+     * @param item Item to be added to the queue.
+     */
     public void add(Item item) {
         if (isFull()) {
             doubleSize();
@@ -69,7 +96,12 @@ public class MyQueue<Item> {
             tail = 0;
         }
     }
-    
+
+    /**
+     * Removes and returns an item from the head of the queue.
+     *
+     * @return Returns an item from the head of the queue.
+     */
     public Item poll() {
         Item deleted = table[head];
         head++;
@@ -78,11 +110,21 @@ public class MyQueue<Item> {
         }
         return deleted;
     }
-    
+
+    /**
+     * Returns but doesn't remove the head of the queue.
+     *
+     * @return Returns but doesn't remove the head of the queue.
+     */
     public Item peek() {
         return table[head];
     }
-    
+
+    /**
+     * Makes a copy of the queue.
+     *
+     * @return Returns a copy of the queue.
+     */
     public MyQueue<Item> clone() {
         MyQueue<Item> newQueue = new MyQueue<>(table.length);
         newQueue.setTable(Arrays.copyOf(table, table.length));
@@ -102,11 +144,11 @@ public class MyQueue<Item> {
     public void setTail(int tail) {
         this.tail = tail;
     }
+
+    public int tableSize() {
+        return table.length;
+    }
     
     
-    
-    
-    
-    
-    
+
 }
