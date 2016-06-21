@@ -203,4 +203,14 @@ public final class Maze {
         return startY;
     }
 
+    public void setEndX(int endX) {
+        this.endX = endX;
+    }
+
+    public void setEndY(int endY) {
+        this.endY = endY;
+    }
+    
+    
+
 }

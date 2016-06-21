@@ -21,9 +21,13 @@ public class MazeGui extends JFrame implements Runnable {
     private final JLabel[][] grid;
     private MyArrayList<Node> currentShortestPath;
     private MyQueue<Node> visitedNodes;
+    private Timer timer;
+    public boolean mousDown;
+    public String status;
+    private JPanel mazeGrid;
 
     public MazeGui(Maze maze) {
-        super("Miinaharava");
+        super("Mazesolver");
 
         this.maze = maze;
         this.grid = new JLabel[maze.getGrid().length][maze.getGrid()[0].length];
@@ -33,7 +37,7 @@ public class MazeGui extends JFrame implements Runnable {
 
     private void createComponents(Container container) {
         container.setLayout(new BorderLayout());
-        JPanel mazeGrid = createMaze();
+        mazeGrid = createMaze();
         container.add(mazeGrid, BorderLayout.CENTER);
         JPanel menu = createMenu();
 
@@ -47,7 +51,7 @@ public class MazeGui extends JFrame implements Runnable {
         JButton newMazeButton = new JButton("Uusi labyrintti");
         newMazeButton.setAlignmentX(CENTER_ALIGNMENT);
         newMazeButton.addActionListener(new MenuButtonListener(newMazeButton, this));
-        menu.add(Box.createRigidArea(new Dimension(0, maze.getGrid()[0].length * 30 / 3)));
+        menu.add(Box.createRigidArea(new Dimension(0, maze.getGrid()[0].length * 15 / 3)));
         menu.add(newMazeButton);
         menu.add(Box.createRigidArea(new Dimension(0, 20)));
         JButton solveAstarButton = new JButton("Ratkaise käyttäen A*");
@@ -59,6 +63,11 @@ public class MazeGui extends JFrame implements Runnable {
         solveIDAButton.setAlignmentX(CENTER_ALIGNMENT);
         solveIDAButton.addActionListener(new MenuButtonListener(solveIDAButton, this));
         menu.add(solveIDAButton);
+        menu.add(Box.createRigidArea(new Dimension(0, 20)));
+        JButton stop = new JButton("Pysäytä");
+        stop.setAlignmentX(CENTER_ALIGNMENT);
+        stop.addActionListener(new MenuButtonListener(stop, this));
+        menu.add(stop);
         menu.add(Box.createRigidArea(new Dimension(170, 0)));
         return menu;
     }
@@ -79,6 +88,7 @@ public class MazeGui extends JFrame implements Runnable {
     }
 
     public void reprint() {
+        mazeGrid.setVisible(false);
         clearPreviousMarks();
         currentShortestPath = new MyArrayList<>();
         visitedNodes = new MyQueue<>();
@@ -92,6 +102,7 @@ public class MazeGui extends JFrame implements Runnable {
                 }
             }
         }
+        mazeGrid.setVisible(true);
     }
 
     public void clearPreviousMarks() {
@@ -111,11 +122,10 @@ public class MazeGui extends JFrame implements Runnable {
     }
 
     public void markVisitedNodes(String algorithm) {
-        Timer timer = null;
         if (algorithm.equals("A*")) {
-            timer = new Timer(10, new TimerListener(visitedNodes.clone(), this));
+            this.timer = new Timer(10, new TimerListener(visitedNodes.clone(), this));
         } else if (algorithm.equals("IDA*")) {
-            timer = new Timer(1, new TimerListener(visitedNodes.clone(), this));
+            this.timer = new Timer(1, new TimerListener(visitedNodes.clone(), this));
         }
         timer.start();
     }
@@ -127,10 +137,11 @@ public class MazeGui extends JFrame implements Runnable {
     }
 
     private void editCell(JLabel cell, int j, int i) {
-        cell.setPreferredSize(new Dimension(30, 30));
+        cell.setPreferredSize(new Dimension(20, 20));
         cell.setOpaque(true);
         cell.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         if (maze.getGrid()[j][i] == '@') {
+            cell.setName("marked");
             cell.setBackground(new Color(204, 122, 0));
         }
     }
@@ -139,7 +150,6 @@ public class MazeGui extends JFrame implements Runnable {
     public void run() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        //setSize(new Dimension(maze.getGrid().length * 30, maze.getGrid().length * 30));
         createComponents(this.getContentPane());
         pack();
         setLocationRelativeTo(this);
@@ -160,6 +170,10 @@ public class MazeGui extends JFrame implements Runnable {
 
     public void setCurrentShortestPath(MyArrayList<Node> currentShortestPath) {
         this.currentShortestPath = currentShortestPath;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
 }
