@@ -1,6 +1,7 @@
 package mazesolver;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import mazesolver.GUI.MazeGui;
 import mazesolver.domain.Maze;
 
@@ -11,7 +12,11 @@ import mazesolver.domain.Maze;
 public class Main {
 
     public static void main(String[] args) {
-        Maze maze = new Maze(21, 21);
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+        }
+        Maze maze = new Maze(25, 25);
         MazeGui gui = new MazeGui(maze);
         SwingUtilities.invokeLater(gui);
     }

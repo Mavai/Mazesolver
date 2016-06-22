@@ -6,8 +6,8 @@
 package mazesolver.GUI;
 
 import java.awt.event.*;
-import java.util.Optional;
 import javax.swing.*;
+import mazesolver.domain.Maze;
 import mazesolver.logic.Astar;
 import mazesolver.logic.IDA;
 
@@ -18,7 +18,9 @@ import mazesolver.logic.IDA;
 public class MenuButtonListener implements ActionListener {
 
     private final JButton pressed;
-    private final MazeGui mainFrame;
+    private MazeGui mainFrame;
+    private int height;
+    private int width;
 
     public MenuButtonListener(JButton pressed, MazeGui mainFrame) {
         this.pressed = pressed;
@@ -27,9 +29,19 @@ public class MenuButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        mainFrame.getStop().setText("Pysäytä");
         if (pressed.getText().equals("Uusi labyrintti")) {
+            width = mainFrame.getWidthSlider().getValue();
+            height = mainFrame.getHeightSlider().getValue();
+            formatWidthAndHeight();
+            if (mainFrame.getMaze().getGrid().length != height || mainFrame.getMaze().getGrid()[0].length != width) {
+                mainFrame.dispose();
+                mainFrame = new MazeGui(new Maze(width, height));
+            }
             if (mainFrame.getTimer() != null) {
                 mainFrame.getTimer().stop();
+                mainFrame.setTimer(null);
             }
             mainFrame.reprint();
         }
@@ -37,25 +49,37 @@ public class MenuButtonListener implements ActionListener {
             if (mainFrame.getTimer() != null) {
                 mainFrame.getTimer().stop();
             }
+            mainFrame.getStop().setText("Pysäytä");
             Astar astar = new Astar(mainFrame.getMaze());
             astar.solve();
             astar.findShortestPath();
             mainFrame.clearPreviousMarks();
             mainFrame.setVisitedNodes(astar.getVisitedNodes());
-            mainFrame.markVisitedNodes("A*");
+            if (mainFrame.getSimulationCheck().isSelected()) {
+                mainFrame.markVisitedNodes("A*");
+            }
             mainFrame.setCurrentShortestPath(astar.getShortestPath());
+            if (!mainFrame.getSimulationCheck().isSelected()) {
+                mainFrame.markShortestPath();
+            }
         }
         if (pressed.getText().equals("Ratkaise käyttäen IDA*")) {
             if (mainFrame.getTimer() != null) {
                 mainFrame.getTimer().stop();
             }
+            mainFrame.getStop().setText("Pysäytä");
             IDA ida = new IDA(mainFrame.getMaze());
             ida.idaSolve();
             ida.findShortestPath();
             mainFrame.clearPreviousMarks();
             mainFrame.setVisitedNodes(ida.getVisited());
-            mainFrame.markVisitedNodes("IDA*");
+            if (mainFrame.getSimulationCheck().isSelected()) {
+                mainFrame.markVisitedNodes("IDA*");
+            }
             mainFrame.setCurrentShortestPath(ida.getShortestPath());
+            if (!mainFrame.getSimulationCheck().isSelected()) {
+                mainFrame.markShortestPath();
+            }
         }
         if (pressed.getText().equals("Pysäytä") || pressed.getText().equals("Jatka")) {
             if (mainFrame.getTimer() == null) {
@@ -67,9 +91,23 @@ public class MenuButtonListener implements ActionListener {
             } else {
                 pressed.setText("Pysäytä");
                 mainFrame.getTimer().start();
-
             }
+        }
+        if (pressed.getText().equals("Nollaa")) {
+            if (mainFrame.getTimer() != null) {
+                mainFrame.getTimer().stop();
+                mainFrame.setTimer(null);
+            }
+            mainFrame.clearPreviousMarks();
+        }
+    }
 
+    private void formatWidthAndHeight() {
+        if (width % 2 == 0) {
+            width += 1;
+        }
+        if (height % 2 == 0) {
+            height += 1;
         }
     }
 

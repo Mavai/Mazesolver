@@ -45,27 +45,27 @@ public class MazeMouseListener implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        mainFrame.status = cell.getName();
-        mainFrame.mousDown = true;
+        mainFrame.clickedCellType = cell.getName();
+        mainFrame.mouseDown = true;
         markCell();
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        mainFrame.mousDown = false;
+        mainFrame.mouseDown = false;
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (mainFrame.mousDown) {
-            if (mainFrame.status.equals("unmarked")) {
+        if (mainFrame.mouseDown) {
+            if (mainFrame.clickedCellType.equals("unmarked")) {
                 if (mainFrame.getMaze().getGrid()[x][y] == ' ') {
                     mainFrame.getMaze().getGrid()[x][y] = '@';
                     cell.setBackground(new Color(204, 122, 0));
                     cell.setName("marked");
                 }
-            } else if (mainFrame.status.equals("marked")) {
+            } else if (mainFrame.clickedCellType.equals("marked")) {
                 if (mainFrame.getMaze().getGrid()[x][y] == '@') {
                     mainFrame.getMaze().getGrid()[x][y] = ' ';
                     cell.setBackground(null);
