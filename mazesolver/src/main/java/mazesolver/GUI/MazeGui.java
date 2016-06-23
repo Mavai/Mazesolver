@@ -200,6 +200,7 @@ public class MazeGui extends JFrame implements Runnable {
     public void clearPreviousMarks() {
         mazeGrid.setVisible(false);
         distance.setText("Polun pituus: ");
+        time.setText("Kulunut aika: ");
         for (Node node : currentShortestPath) {
             if (maze.getGrid()[node.getX()][node.getY()] == ' ') {
                 grid[node.getX()][node.getY()].setBackground(null);
