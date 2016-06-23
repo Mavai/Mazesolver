@@ -30,6 +30,9 @@ public class MazeGui extends JFrame implements Runnable {
     private JSlider widthSlider;
     private JSlider timerSpeed;
     private JCheckBox simulationCheck;
+    private JLabel distance;
+    private long elapsedTime;
+    private JLabel time;
 
     public MazeGui(Maze maze) {
         super("Mazesolver");
@@ -59,25 +62,33 @@ public class MazeGui extends JFrame implements Runnable {
     public JPanel createMenu() {
         JPanel menu = new JPanel();
         menu.setLayout(new BoxLayout(menu, BoxLayout.PAGE_AXIS));
-        menu.add(Box.createRigidArea(new Dimension(0, grid[0].length * 18 / 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, grid[0].length * 5 / 10)));
         createSliders(menu);
         JButton newMazeButton = createNewMazeButton();
         menu.add(newMazeButton);
         menu.add(Box.createRigidArea(new Dimension(0, 10)));
         JButton solveAstarButton = createSolveAstarButton();
         menu.add(solveAstarButton);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
         JButton solveIDAButton = createSolveIDAButton();
         menu.add(solveIDAButton);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
         stop = createStopButton();
         menu.add(stop);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
         JButton clear = createClearButton();
         menu.add(clear);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
         createSimulationCheckbox();
         menu.add(simulationCheck);
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
+        distance = new JLabel("Polun pituus: ");
+        distance.setAlignmentX(CENTER_ALIGNMENT);
+        menu.add(distance);
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
+        time = new JLabel("Kulunut aika: ");
+        time.setAlignmentX(CENTER_ALIGNMENT);
+        menu.add(time);
         menu.add(Box.createRigidArea(new Dimension(170, 0)));
         return menu;
     }
@@ -99,27 +110,28 @@ public class MazeGui extends JFrame implements Runnable {
         timerSpeed = new JSlider(0, 200, 10);
         JLabel heightLabel = new JLabel("Korkeus: 25");
         JLabel widthLabel = new JLabel("Leveys: 25");
-        JLabel speedLabel = new JLabel("Nopeus: 100");
-        heightSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().height - 90) / 18, 25);
+        JLabel speedLabel = new JLabel("Nopeus: 10");
+        heightSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().height - 90) / 15, 25);
         heightSlider.setName("height");
         heightSlider.addChangeListener(new SliderListener(heightLabel, widthLabel, speedLabel));
         menu.add(heightSlider);
         menu.add(heightLabel);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
-        widthSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().width - 200) / 18, 25);
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
+        widthSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().width - 200) / 15, 25);
         widthSlider.setName("width");
         widthSlider.addChangeListener(new SliderListener(heightLabel, widthLabel, speedLabel));
         menu.add(widthSlider);
         menu.add(widthLabel);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
         timerSpeed.setName("speed");
         timerSpeed.setMajorTickSpacing(10);
+        timerSpeed.setMinorTickSpacing(5);
         timerSpeed.setPaintTicks(true);
         timerSpeed.setSnapToTicks(true);
         timerSpeed.addChangeListener(new SliderListener(speedLabel, widthLabel, speedLabel));
         menu.add(timerSpeed);
         menu.add(speedLabel);
-        menu.add(Box.createRigidArea(new Dimension(0, 10)));
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
         return heightSlider;
     }
 
@@ -187,6 +199,7 @@ public class MazeGui extends JFrame implements Runnable {
 
     public void clearPreviousMarks() {
         mazeGrid.setVisible(false);
+        distance.setText("Polun pituus: ");
         for (Node node : currentShortestPath) {
             if (maze.getGrid()[node.getX()][node.getY()] == ' ') {
                 grid[node.getX()][node.getY()].setBackground(null);
@@ -217,17 +230,24 @@ public class MazeGui extends JFrame implements Runnable {
         for (Node node : currentShortestPath) {
             grid[node.getX()][node.getY()].setBackground(Color.green);
         }
+        distance.setText("Polun pituus: " + currentShortestPath.size());
+        time.setText("Kulunut aika: " + elapsedTime + " ms");
         mazeGrid.setVisible(true);
     }
 
     private void editCell(JLabel cell, int j, int i) {
-        cell.setPreferredSize(new Dimension(18, 18));
+        cell.setPreferredSize(new Dimension(15, 15));
         cell.setOpaque(true);
         cell.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         if (maze.getGrid()[j][i] == '@') {
             cell.setName("marked");
             cell.setBackground(new Color(204, 122, 0));
         } else {
+//            if (j == maze.getStartX() && i == maze.getStartY()) {
+//                cell.setBackground(Color.BLUE);
+//            } else if (j == maze.getEndX() && i == maze.getEndY()) {
+//                cell.setBackground(Color.BLUE);
+//            }
             cell.setName("unmarked");
         }
     }
@@ -275,5 +295,13 @@ public class MazeGui extends JFrame implements Runnable {
     public JCheckBox getSimulationCheck() {
         return simulationCheck;
     }
+
+    public void setElapsedTime(long elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
+   
+    
+    
 
 }

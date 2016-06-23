@@ -29,7 +29,7 @@ public class MenuButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        long elpasedTime = 0;
         mainFrame.getStop().setText("Pysäytä");
         if (pressed.getText().equals("Uusi labyrintti")) {
             width = mainFrame.getWidthSlider().getValue();
@@ -51,7 +51,10 @@ public class MenuButtonListener implements ActionListener {
             }
             mainFrame.getStop().setText("Pysäytä");
             Astar astar = new Astar(mainFrame.getMaze());
+            elpasedTime = System.currentTimeMillis();
             astar.solve();
+            elpasedTime = System.currentTimeMillis() - elpasedTime;
+            mainFrame.setElapsedTime(elpasedTime);
             astar.findShortestPath();
             mainFrame.clearPreviousMarks();
             mainFrame.setVisitedNodes(astar.getVisitedNodes());
@@ -69,7 +72,10 @@ public class MenuButtonListener implements ActionListener {
             }
             mainFrame.getStop().setText("Pysäytä");
             IDA ida = new IDA(mainFrame.getMaze());
+            elpasedTime = System.currentTimeMillis();
             ida.idaSolve();
+            elpasedTime = System.currentTimeMillis() - elpasedTime;
+            mainFrame.setElapsedTime(elpasedTime);
             ida.findShortestPath();
             mainFrame.clearPreviousMarks();
             mainFrame.setVisitedNodes(ida.getVisited());

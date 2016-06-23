@@ -38,7 +38,7 @@ public class TimerListener implements ActionListener {
             mainFrame.getGrid()[node.getX()][node.getY()].setBackground(null);
             mainFrame.getGrid()[node.getX()][node.getY()].setName("unmarked");
         }
-
+        mainFrame.getToolkit().sync();
     }
-
+    
 }
