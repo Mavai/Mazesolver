@@ -29,12 +29,15 @@ Näiden algoritmien etenemistä labyrintissa on tarkoitus simloida graafisesti. Li
 ##Polunetsintäalgoritmien aika- ja tilavaativuudet
 
 w = leveys, h = korkeus
+
 **A***
+
 A* algoritmi käy pahimmassa tapauksessa läpi kaikki labyrintin solut ja suorittaa jokaisen kohdalla MyPriorityQueue.add() operaatioita.
 - Aikavaativuus O(w * h * log(w * h))
 - Tilavaativuus O(w * h)
 
 **IDA***
+
 IDA* suorittaa pahimmassa tapauksessa w * h syvyyshakua, syvyyden kasvaessa aina yhdellä. Tällöin myös tilavaativuus on lyhin polku, eli w * h, 
 mutta käytännössä lyhin polku ei koskaan käy labyrintin kaikissa soluissa.
 - Aikavaativuus O(w * h)^2
@@ -42,8 +45,8 @@ mutta käytännössä lyhin polku ei koskaan käy labyrintin kaikissa soluissa.
 
 ##Analyysia
 
-Kuten aikavaativuuksista nähdään A* on keolla toteutettuna nopeampi kuin A*. Tämä käy myös ilmi ohjelma suorituskykytesteistä. Ohjelmassa sallituilla 
-syötteillä suurta eroa ei kuitenkaan ole huomattavissa. Sopivasti optimoituna IDA* olisi mahdollista saada samaan aikavaativuusluokkaan kuin A*. 
+Kuten aikavaativuuksista nähdään A* on keolla toteutettuna nopeampi kuin A* . Tämä käy myös ilmi ohjelman suorituskykytesteistä. Ohjelmassa sallituilla 
+syötteillä suurta eroa ei kuitenkaan ole huomattavissa. Sopivasti optimoituna IDA* olisi mahdollista saada samaan aikavaativuusluokkaan kuin A* . 
 Tilavaativuudeltaan IDA* on kuitenkin lähes aina parempi vaihtoehto, sillä se pitää muistissa vain kullakin hetkellä käsiteltävänä olevan polun, jonka 
 maksimipituus on sama kuin labyrintin ratkaisulla.
 
