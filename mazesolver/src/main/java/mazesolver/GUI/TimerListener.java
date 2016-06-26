@@ -2,6 +2,7 @@ package mazesolver.GUI;
 
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.JLabel;
 import javax.swing.Timer;
 import mazesolver.data_structures.MyQueue;
 import mazesolver.domain.Node;
@@ -12,8 +13,8 @@ import mazesolver.domain.Node;
  */
 public class TimerListener implements ActionListener {
 
-    private MyQueue<Node> path;
-    private MazeGui mainFrame;
+    private final MyQueue<Node> path;
+    private final MazeGui mainFrame;
 
     public TimerListener(MyQueue<Node> path, MazeGui mainFrame) {
         this.path = path;
@@ -31,12 +32,18 @@ public class TimerListener implements ActionListener {
             return;
         }
         node = path.poll();
-        if (mainFrame.getGrid()[node.getX()][node.getY()].getName().equals("") || mainFrame.getGrid()[node.getX()][node.getY()].getName().equals("unmarked")) {
-            mainFrame.getGrid()[node.getX()][node.getY()].setBackground(new Color(128, 255, 128));
-            mainFrame.getGrid()[node.getX()][node.getY()].setName("marked");
+        JLabel cell = mainFrame.getGrid()[node.getX()][node.getY()];
+        if (cell.getName().equals("") || mainFrame.getGrid()[node.getX()][node.getY()].getName().equals("unmarked")) {
+            cell.setBackground(new Color(128, 255, 128));
+            cell.setName("marked");
         } else {
-            mainFrame.getGrid()[node.getX()][node.getY()].setBackground(null);
-            mainFrame.getGrid()[node.getX()][node.getY()].setName("unmarked");
+            cell.setBackground(null);
+            cell.setName("unmarked");
+        }
+        if (node.getX() == mainFrame.getMaze().getStartX() && node.getY() == mainFrame.getMaze().getStartY()) {
+            cell.setBackground(Color.BLUE);
+        } else if (node.getX() == mainFrame.getMaze().getEndX() && node.getY() == mainFrame.getMaze().getEndY()) {
+            cell.setBackground(Color.red);
         }
         mainFrame.getToolkit().sync();
     }

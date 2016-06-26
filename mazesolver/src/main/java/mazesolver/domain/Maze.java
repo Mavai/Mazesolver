@@ -203,14 +203,23 @@ public final class Maze {
         return startY;
     }
 
-    public void setEndX(int endX) {
-        this.endX = endX;
+    public void setStartX(int startX) {
+        this.startX = startX;
     }
 
-    public void setEndY(int endY) {
-        this.endY = endY;
+    public void setStartY(int startY) {
+        this.startY = startY;
     }
     
+    public void setGoalCell(int x, int y) {
+        endX = x;
+        endY = y;
+    }
+    
+    public void setStartCell(int x, int y) {
+        startX = x;
+        startY = y;
+    }
     
 
 }

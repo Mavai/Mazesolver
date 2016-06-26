@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import mazesolver.GUI.MazeGui;
 import mazesolver.domain.Maze;
+import mazesolver.performance_tests.PerformanceTest;
 
 /**
  *

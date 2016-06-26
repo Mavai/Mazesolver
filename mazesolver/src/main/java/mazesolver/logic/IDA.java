@@ -18,6 +18,7 @@ public class IDA {
     private final Node[][] path;
     private final MyQueue<Node> visited;
     private final MyArrayList<Node> shortestPath;
+    private int distance;
 
     /**
      * Constructor for an IDA algorithm.
@@ -46,9 +47,11 @@ public class IDA {
             this.used = new boolean[grid.length][grid[0].length];
             int t = search(root, 0, limit);
             if (found) {
+                distance = limit;
                 return limit;
             }
             if (t == 1000000) {
+                distance = -1;
                 return -1;
             }
             limit = t;
@@ -98,6 +101,9 @@ public class IDA {
      * Gets the nodes from the shortest path.
      */
     public void findShortestPath() {
+        if (distance == -1) {
+            return;
+        }
         MyStack<Node> stack = new MyStack<>();
         Node node = new Node(maze.getEndX(), maze.getEndY(), 0);
         while (node.getX() != maze.getStartX() || node.getY() != maze.getStartY()) {

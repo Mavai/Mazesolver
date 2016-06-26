@@ -54,7 +54,6 @@ public class MazeGui extends JFrame implements Runnable {
         mazeGrid = createMaze();
         container.add(mazeGrid, BorderLayout.CENTER);
         JPanel menu = createMenu();
-
         container.add(menu, BorderLayout.EAST);
 
     }
@@ -82,15 +81,23 @@ public class MazeGui extends JFrame implements Runnable {
         createSimulationCheckbox();
         menu.add(simulationCheck);
         menu.add(Box.createRigidArea(new Dimension(0, 5)));
+        createDistanceLabel(menu);
+        menu.add(Box.createRigidArea(new Dimension(0, 5)));
+        createElapsedTimeLabel(menu);
+        menu.add(Box.createRigidArea(new Dimension(170, 0)));
+        return menu;
+    }
+
+    private void createDistanceLabel(JPanel menu) {
         distance = new JLabel("Polun pituus: ");
         distance.setAlignmentX(CENTER_ALIGNMENT);
         menu.add(distance);
-        menu.add(Box.createRigidArea(new Dimension(0, 5)));
+    }
+
+    private void createElapsedTimeLabel(JPanel menu) {
         time = new JLabel("Kulunut aika: ");
         time.setAlignmentX(CENTER_ALIGNMENT);
         menu.add(time);
-        menu.add(Box.createRigidArea(new Dimension(170, 0)));
-        return menu;
     }
 
     private void createSimulationCheckbox() {
@@ -108,16 +115,16 @@ public class MazeGui extends JFrame implements Runnable {
 
     private JSlider createSliders(JPanel menu) {
         timerSpeed = new JSlider(0, 200, 10);
-        JLabel heightLabel = new JLabel("Korkeus: 25");
-        JLabel widthLabel = new JLabel("Leveys: 25");
+        JLabel heightLabel = new JLabel("Korkeus: " + maze.getGrid()[0].length);
+        JLabel widthLabel = new JLabel("Leveys: " + maze.getGrid().length);
         JLabel speedLabel = new JLabel("Nopeus: 10");
-        heightSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().height - 90) / 15, 25);
+        heightSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().height - 90) / 15 - 1, maze.getGrid()[0].length);
         heightSlider.setName("height");
         heightSlider.addChangeListener(new SliderListener(heightLabel, widthLabel, speedLabel));
         menu.add(heightSlider);
         menu.add(heightLabel);
         menu.add(Box.createRigidArea(new Dimension(0, 5)));
-        widthSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().width - 200) / 15, 25);
+        widthSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().width - 200) / 15 - 1, maze.getGrid().length);
         widthSlider.setName("width");
         widthSlider.addChangeListener(new SliderListener(heightLabel, widthLabel, speedLabel));
         menu.add(widthSlider);
@@ -136,7 +143,7 @@ public class MazeGui extends JFrame implements Runnable {
     }
 
     private JButton createStopButton() {
-        JButton stop = new JButton("Pysäytä");
+        stop = new JButton("Pysäytä");
         stop.setAlignmentX(CENTER_ALIGNMENT);
         stop.addActionListener(new MenuButtonListener(stop, this));
         return stop;
@@ -185,28 +192,49 @@ public class MazeGui extends JFrame implements Runnable {
         this.maze = new Maze(maze.getGrid().length, maze.getGrid()[0].length);
         for (int i = 0; i < maze.getGrid()[0].length; i++) {
             for (int j = 0; j < maze.getGrid().length; j++) {
+                JLabel cell = grid[j][i];
                 if (maze.getGrid()[j][i] == '@') {
-                    grid[j][i].setBackground(new Color(204, 122, 0));
-                    grid[j][i].setName("marked");
+                    cell.setBackground(new Color(204, 122, 0));
+                    cell.setName("marked");
                 } else {
-                    grid[j][i].setBackground(null);
-                    grid[j][i].setName("unmarked");
+                    cell.setBackground(null);
+                    cell.setName("unmarked");
                 }
+                markStartAndGoalNodes(j, i, cell);
             }
         }
         mazeGrid.setVisible(true);
+    }
+
+    private void markStartAndGoalNodes(int j, int i, JLabel cell) {
+        if (j == maze.getStartX() && i == maze.getStartY()) {
+            cell.setBackground(Color.BLUE);
+        } else if (j == maze.getEndX() && i == maze.getEndY()) {
+            cell.setBackground(Color.red);
+        }
     }
 
     public void clearPreviousMarks() {
         mazeGrid.setVisible(false);
         distance.setText("Polun pituus: ");
         time.setText("Kulunut aika: ");
+        clearShortestPath();
+        clearVisitedNodes();
+        mazeGrid.setVisible(true);
+        getGoalCell().setBackground(Color.BLUE);
+        getEndCell().setBackground(Color.red);
+    }
+
+    private void clearShortestPath() {
         for (Node node : currentShortestPath) {
             if (maze.getGrid()[node.getX()][node.getY()] == ' ') {
                 grid[node.getX()][node.getY()].setBackground(null);
                 grid[node.getX()][node.getY()].setName("unmarked");
             }
         }
+    }
+
+    private void clearVisitedNodes() {
         while (!visitedNodes.isEmpty()) {
             Node node = visitedNodes.poll();
             if (maze.getGrid()[node.getX()][node.getY()] == ' ') {
@@ -214,10 +242,11 @@ public class MazeGui extends JFrame implements Runnable {
                 grid[node.getX()][node.getY()].setName("unmarked");
             }
         }
-        mazeGrid.setVisible(true);
     }
 
     public void markVisitedNodes(String algorithm) {
+        getGoalCell().setBackground(Color.BLUE);
+        getEndCell().setBackground(Color.red);
         if (algorithm.equals("A*")) {
             this.timer = new Timer(timerSpeed.getValue(), new TimerListener(visitedNodes.clone(), this));
         } else if (algorithm.equals("IDA*")) {
@@ -230,6 +259,11 @@ public class MazeGui extends JFrame implements Runnable {
         mazeGrid.setVisible(false);
         for (Node node : currentShortestPath) {
             grid[node.getX()][node.getY()].setBackground(Color.green);
+            if (node.getX() == maze.getStartX() && node.getY() == maze.getStartY()) {
+                grid[node.getX()][node.getY()].setBackground(Color.BLUE);
+            } else if (node.getX() == maze.getEndX() && node.getY() == maze.getEndY()) {
+                grid[node.getX()][node.getY()].setBackground(Color.red);
+            }
         }
         distance.setText("Polun pituus: " + currentShortestPath.size());
         time.setText("Kulunut aika: " + elapsedTime + " ms");
@@ -244,11 +278,7 @@ public class MazeGui extends JFrame implements Runnable {
             cell.setName("marked");
             cell.setBackground(new Color(204, 122, 0));
         } else {
-//            if (j == maze.getStartX() && i == maze.getStartY()) {
-//                cell.setBackground(Color.BLUE);
-//            } else if (j == maze.getEndX() && i == maze.getEndY()) {
-//                cell.setBackground(Color.BLUE);
-//            }
+            markStartAndGoalNodes(j, i, cell);
             cell.setName("unmarked");
         }
     }
@@ -301,8 +331,12 @@ public class MazeGui extends JFrame implements Runnable {
         this.elapsedTime = elapsedTime;
     }
 
-   
+    public JLabel getGoalCell() {
+        return grid[maze.getStartX()][maze.getStartY()];
+    }
     
-    
+    public JLabel getEndCell() {
+        return grid[maze.getEndX()][maze.getEndY()];
+    }
 
 }

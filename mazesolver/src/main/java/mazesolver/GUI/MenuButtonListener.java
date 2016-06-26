@@ -29,82 +29,106 @@ public class MenuButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        long elpasedTime = 0;
         mainFrame.getStop().setText("Pysäytä");
         if (pressed.getText().equals("Uusi labyrintti")) {
-            width = mainFrame.getWidthSlider().getValue();
-            height = mainFrame.getHeightSlider().getValue();
-            formatWidthAndHeight();
-            if (mainFrame.getMaze().getGrid().length != height || mainFrame.getMaze().getGrid()[0].length != width) {
-                mainFrame.dispose();
-                mainFrame = new MazeGui(new Maze(width, height));
-            }
-            if (mainFrame.getTimer() != null) {
-                mainFrame.getTimer().stop();
-                mainFrame.setTimer(null);
-            }
-            mainFrame.reprint();
+            newMaze();
         }
         if (pressed.getText().equals("Ratkaise käyttäen A*")) {
-            if (mainFrame.getTimer() != null) {
-                mainFrame.getTimer().stop();
-            }
-            mainFrame.getStop().setText("Pysäytä");
-            Astar astar = new Astar(mainFrame.getMaze());
-            elpasedTime = System.currentTimeMillis();
-            astar.solve();
-            elpasedTime = System.currentTimeMillis() - elpasedTime;
-            mainFrame.setElapsedTime(elpasedTime);
-            astar.findShortestPath();
-            mainFrame.clearPreviousMarks();
-            mainFrame.setVisitedNodes(astar.getVisitedNodes());
-            if (mainFrame.getSimulationCheck().isSelected()) {
-                mainFrame.markVisitedNodes("A*");
-            }
-            mainFrame.setCurrentShortestPath(astar.getShortestPath());
-            if (!mainFrame.getSimulationCheck().isSelected()) {
-                mainFrame.markShortestPath();
-            }
+            solveAstar();
         }
         if (pressed.getText().equals("Ratkaise käyttäen IDA*")) {
-            if (mainFrame.getTimer() != null) {
-                mainFrame.getTimer().stop();
-            }
-            mainFrame.getStop().setText("Pysäytä");
-            IDA ida = new IDA(mainFrame.getMaze());
-            elpasedTime = System.currentTimeMillis();
-            ida.idaSolve();
-            elpasedTime = System.currentTimeMillis() - elpasedTime;
-            mainFrame.setElapsedTime(elpasedTime);
-            ida.findShortestPath();
-            mainFrame.clearPreviousMarks();
-            mainFrame.setVisitedNodes(ida.getVisited());
-            if (mainFrame.getSimulationCheck().isSelected()) {
-                mainFrame.markVisitedNodes("IDA*");
-            }
-            mainFrame.setCurrentShortestPath(ida.getShortestPath());
-            if (!mainFrame.getSimulationCheck().isSelected()) {
-                mainFrame.markShortestPath();
-            }
+            solveIDA();
         }
         if (pressed.getText().equals("Pysäytä") || pressed.getText().equals("Jatka")) {
-            if (mainFrame.getTimer() == null) {
-                return;
-            }
-            if (mainFrame.getTimer().isRunning()) {
-                pressed.setText("Jatka");
-                mainFrame.getTimer().stop();
-            } else {
-                pressed.setText("Pysäytä");
-                mainFrame.getTimer().start();
-            }
+            if (stopOrContinue()) return;
         }
         if (pressed.getText().equals("Nollaa")) {
-            if (mainFrame.getTimer() != null) {
-                mainFrame.getTimer().stop();
-                mainFrame.setTimer(null);
-            }
-            mainFrame.clearPreviousMarks();
+            reset();
+        }
+    }
+
+    private void reset() {
+        if (mainFrame.getTimer() != null) {
+            mainFrame.getTimer().stop();
+            mainFrame.setTimer(null);
+        }
+        mainFrame.clearPreviousMarks();
+    }
+
+    private boolean stopOrContinue() {
+        if (mainFrame.getTimer() == null) {
+            return true;
+        }
+        if (mainFrame.getTimer().isRunning()) {
+            pressed.setText("Jatka");
+            mainFrame.getTimer().stop();
+        } else {
+            pressed.setText("Pysäytä");
+            mainFrame.getTimer().start();
+        }
+        return false;
+    }
+
+    private void solveIDA() {
+        long elpasedTime;
+        stopTimer();
+        mainFrame.getStop().setText("Pysäytä");
+        IDA ida = new IDA(mainFrame.getMaze());
+        elpasedTime = System.currentTimeMillis();
+        ida.idaSolve();
+        elpasedTime = System.currentTimeMillis() - elpasedTime;
+        mainFrame.setElapsedTime(elpasedTime);
+        ida.findShortestPath();
+        mainFrame.clearPreviousMarks();
+        mainFrame.setVisitedNodes(ida.getVisited());
+        if (mainFrame.getSimulationCheck().isSelected()) {
+            mainFrame.markVisitedNodes("IDA*");
+        }
+        mainFrame.setCurrentShortestPath(ida.getShortestPath());
+        if (!mainFrame.getSimulationCheck().isSelected()) {
+            mainFrame.markShortestPath();
+        }
+    }
+    
+    private void solveAstar() {
+        long elpasedTime;
+        stopTimer();
+        mainFrame.getStop().setText("Pysäytä");
+        Astar astar = new Astar(mainFrame.getMaze());
+        elpasedTime = System.currentTimeMillis();
+        astar.solve();
+        elpasedTime = System.currentTimeMillis() - elpasedTime;
+        mainFrame.setElapsedTime(elpasedTime);
+        astar.findShortestPath();
+        mainFrame.clearPreviousMarks();
+        mainFrame.setVisitedNodes(astar.getVisitedNodes());
+        if (mainFrame.getSimulationCheck().isSelected()) {
+            mainFrame.markVisitedNodes("A*");
+        }
+        mainFrame.setCurrentShortestPath(astar.getShortestPath());
+        if (!mainFrame.getSimulationCheck().isSelected()) {
+            mainFrame.markShortestPath();
+        }
+    }
+    
+    private void newMaze() {
+        width = mainFrame.getWidthSlider().getValue();
+        height = mainFrame.getHeightSlider().getValue();
+        formatWidthAndHeight();
+        if (mainFrame.getMaze().getGrid().length != height || mainFrame.getMaze().getGrid()[0].length != width) {
+            mainFrame.dispose();
+            mainFrame = new MazeGui(new Maze(width, height));
+        }
+        if (mainFrame.getTimer() != null) {
+            mainFrame.getTimer().stop();
+            mainFrame.setTimer(null);
+        }
+        mainFrame.reprint();
+    }
+
+    private void stopTimer() {
+        if (mainFrame.getTimer() != null) {
+            mainFrame.getTimer().stop();
         }
     }
 
