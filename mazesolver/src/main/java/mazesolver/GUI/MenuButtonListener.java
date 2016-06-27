@@ -115,7 +115,7 @@ public class MenuButtonListener implements ActionListener {
         width = mainFrame.getWidthSlider().getValue();
         height = mainFrame.getHeightSlider().getValue();
         formatWidthAndHeight();
-        if (mainFrame.getMaze().getGrid().length != height || mainFrame.getMaze().getGrid()[0].length != width) {
+        if (mainFrame.getMaze().getGrid()[0].length != height || mainFrame.getMaze().getGrid().length != width) {
             mainFrame.dispose();
             mainFrame = new MazeGui(new Maze(width, height));
         }
