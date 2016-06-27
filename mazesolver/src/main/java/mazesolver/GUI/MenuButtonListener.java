@@ -29,17 +29,17 @@ public class MenuButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        mainFrame.getStop().setText("PysÃ¤ytÃ¤");
+        mainFrame.getStop().setText("Pysäytä");
         if (pressed.getText().equals("Uusi labyrintti")) {
             newMaze();
         }
-        if (pressed.getText().equals("Ratkaise kÃ¤yttÃ¤en A*")) {
+        if (pressed.getText().equals("Ratkaise käyttäen A*")) {
             solveAstar();
         }
-        if (pressed.getText().equals("Ratkaise kÃ¤yttÃ¤en IDA*")) {
+        if (pressed.getText().equals("Ratkaise käyttäen IDA*")) {
             solveIDA();
         }
-        if (pressed.getText().equals("PysÃ¤ytÃ¤") || pressed.getText().equals("Jatka")) {
+        if (pressed.getText().equals("Pysäytä") || pressed.getText().equals("Jatka")) {
             if (stopOrContinue()) return;
         }
         if (pressed.getText().equals("Nollaa")) {
@@ -63,7 +63,7 @@ public class MenuButtonListener implements ActionListener {
             pressed.setText("Jatka");
             mainFrame.getTimer().stop();
         } else {
-            pressed.setText("PysÃ¤ytÃ¤");
+            pressed.setText("Pysäytä");
             mainFrame.getTimer().start();
         }
         return false;
@@ -72,7 +72,7 @@ public class MenuButtonListener implements ActionListener {
     private void solveIDA() {
         long elpasedTime;
         stopTimer();
-        mainFrame.getStop().setText("PysÃ¤ytÃ¤");
+        mainFrame.getStop().setText("Pysäytä");
         IDA ida = new IDA(mainFrame.getMaze());
         elpasedTime = System.currentTimeMillis();
         ida.idaSolve();
@@ -93,7 +93,7 @@ public class MenuButtonListener implements ActionListener {
     private void solveAstar() {
         long elpasedTime;
         stopTimer();
-        mainFrame.getStop().setText("PysÃ¤ytÃ¤");
+        mainFrame.getStop().setText("Pysäytä");
         Astar astar = new Astar(mainFrame.getMaze());
         elpasedTime = System.currentTimeMillis();
         astar.solve();
@@ -115,7 +115,7 @@ public class MenuButtonListener implements ActionListener {
         width = mainFrame.getWidthSlider().getValue();
         height = mainFrame.getHeightSlider().getValue();
         formatWidthAndHeight();
-        if (mainFrame.getMaze().getGrid()[0].length != height || mainFrame.getMaze().getGrid().length != width) {
+        if (mainFrame.getMaze().getGrid().length != height || mainFrame.getMaze().getGrid()[0].length != width) {
             mainFrame.dispose();
             mainFrame = new MazeGui(new Maze(width, height));
         }

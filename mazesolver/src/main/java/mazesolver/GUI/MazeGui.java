@@ -114,19 +114,17 @@ public class MazeGui extends JFrame implements Runnable {
     }
 
     private JSlider createSliders(JPanel menu) {
-        int width = (Toolkit.getDefaultToolkit().getScreenSize().width - 250) / 15;
-        int height = (Toolkit.getDefaultToolkit().getScreenSize().height - 120) / 15;
         timerSpeed = new JSlider(0, 200, 10);
-        JLabel heightLabel = new JLabel("Korkeus: " + Math.min(height, maze.getGrid()[0].length));
-        JLabel widthLabel = new JLabel("Leveys: " + Math.min(width, maze.getGrid().length));
+        JLabel heightLabel = new JLabel("Korkeus: " + maze.getGrid()[0].length);
+        JLabel widthLabel = new JLabel("Leveys: " + maze.getGrid().length);
         JLabel speedLabel = new JLabel("Nopeus: 10");
-        heightSlider = new JSlider(JSlider.HORIZONTAL, 20, height, Math.min(height, maze.getGrid()[0].length));
+        heightSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().height - 90) / 15 - 1, maze.getGrid()[0].length);
         heightSlider.setName("height");
         heightSlider.addChangeListener(new SliderListener(heightLabel, widthLabel, speedLabel));
         menu.add(heightSlider);
         menu.add(heightLabel);
         menu.add(Box.createRigidArea(new Dimension(0, 5)));
-        widthSlider = new JSlider(JSlider.HORIZONTAL, 20, width, Math.min(width, maze.getGrid().length));
+        widthSlider = new JSlider(JSlider.HORIZONTAL, 20, (Toolkit.getDefaultToolkit().getScreenSize().width - 200) / 15 - 1, maze.getGrid().length);
         widthSlider.setName("width");
         widthSlider.addChangeListener(new SliderListener(heightLabel, widthLabel, speedLabel));
         menu.add(widthSlider);
@@ -340,11 +338,5 @@ public class MazeGui extends JFrame implements Runnable {
     public JLabel getEndCell() {
         return grid[maze.getEndX()][maze.getEndY()];
     }
-
-    public void setMaze(Maze maze) {
-        this.maze = maze;
-    }
-    
-    
 
 }
